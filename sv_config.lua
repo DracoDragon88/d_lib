@@ -35,4 +35,5 @@ Config.Webhooks = {
 
     ['adminscreenshot'] = '',
     ['adminactions'] = '',
+    ['txeventlogs'] = '',
 }
