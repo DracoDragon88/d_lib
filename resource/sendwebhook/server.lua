@@ -16,6 +16,7 @@ local function sendLogQueue(name)
     end
 end
 
+
 dlib.SendWebhook = function(data)
     --[[
         data = {
@@ -118,9 +119,15 @@ dlib.SendWebhook = function(data)
                 end
             end
 
-            if Config. data.webhook == nil or data.anticheat then 
+            local content = ''
+            if data.tagEveryone then
+                content = '@everyone'
+            end
+
+            if data.webhook == nil or data.anticheat then 
                 PerformHttpRequest(_webhook, function(err, text, headers) end, 'POST', json.encode({
                     username = data.username or Config.ServerName.." Logs",
+                    content = content,
                     avatar_url = (data.anticheat and 'https://assets.dracomail.net/ghost.png' or Config.ServerLogo),
                     embeds = embed
                 }), { ['Content-Type'] = 'application/json'})
@@ -188,6 +195,23 @@ dlib.SendWebhook = function(data)
         })
     end
 end
+
+RegisterNetEvent('qb-log:server:CreateLog', function(name, title, color, message, tagEveryone, imageUrl)
+    dlib.SendWebhook({
+        webhook = name,
+        anticheat = false,
+        color = color,
+        title = title,
+        desc = message,
+        image = imageUrl and imageUrl ~= '' and { ['url'] = imageUrl } or nil,
+        author = {
+            name = 'QBCore Logs',
+            url = 'https://raw.githubusercontent.com/GhzGarage/qb-media-kit/main/Display%20Pictures/Logo%20-%20Display%20Picture%20-%20Stylized%20-%20Red.png',
+        },
+        tagEveryone = tagEveryone or false,
+        source = source
+    })
+end)
 
 dlib.cron.new('* * * * *', function() -- Post the logs every minute
     for name, queue in pairs(logQueue) do
