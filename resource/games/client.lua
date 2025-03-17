@@ -407,8 +407,12 @@ dlib.Hacking = function(solutionsize, timeout)
     return result.success, result.fails
 end
 
-TriggerEvent("__cfx_export_ps-ui_Circle", dlib.Circle)
-TriggerEvent("__cfx_export_ps-ui_Maze", dlib.Maze)
-TriggerEvent("__cfx_export_ps-ui_Scrambler", dlib.Scrambler)
-TriggerEvent("__cfx_export_ps-ui_Thermite", dlib.Thermite)
-TriggerEvent("__cfx_export_ps-ui_VarHack", dlib.VarHack)
+CreateThread(function() 
+    if GetResourceState('ps-ui') ~= 'started' then
+        TriggerEvent("__cfx_export_ps-ui_Circle", dlib.Circle)
+        TriggerEvent("__cfx_export_ps-ui_Maze", dlib.Maze)
+        TriggerEvent("__cfx_export_ps-ui_Scrambler", dlib.Scrambler)
+        TriggerEvent("__cfx_export_ps-ui_Thermite", dlib.Thermite)
+        TriggerEvent("__cfx_export_ps-ui_VarHack", dlib.VarHack)
+    end
+end)
